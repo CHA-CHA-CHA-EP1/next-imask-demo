@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  box-sizing: border-box;
+  background-color: #f0f4f8 !important;
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.textColor32383E {
+  color: #32383e;
+}
+
+.textColor636B74 {
+  color: #636b74;
+}
+
+/* Disable tap zoom in iOS and Android */
+@media screen and (max-width: 767px) {
+  /* For iOS */
+  -webkit-touch-callout: none;
+  /* For Android */
+  touch-action: manipulation;
+}
+

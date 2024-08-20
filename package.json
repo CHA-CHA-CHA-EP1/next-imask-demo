@@ -1,0 +1,39 @@
+{
+  "name": "next-demo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "env-cmd -f .env.dev next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint --dir ./src --dir ./app",
+    "build:dev": "env-cmd -f .env.dev npx next build && mkdir build_dev && mv out/* build_dev/.",
+    "build:sit": "rm -rf build_sit && env-cmd -f .env.sit npx next build && mkdir build_sit && mv out/* build_sit/."
+  },
+  "dependencies": {
+    "@emotion/cache": "^11.13.1",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@fontsource/inter": "^5.0.20",
+    "@hookform/resolvers": "^3.9.0",
+    "@mui/joy": "5.0.0-beta.48",
+    "@mui/material": "^5.16.7",
+    "env-cmd": "^10.1.0",
+    "next": "14.2.5",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.52.2",
+    "react-imask": "^7.6.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
