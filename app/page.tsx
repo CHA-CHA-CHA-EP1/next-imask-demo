@@ -3,15 +3,17 @@ import { Stack, Button, Typography, Input } from "@mui/joy";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegexMaskAdapter, RegexMaskAdapter2 } from "@/src/imask";
+import { LaserCodeMaskAdapter, RegexMaskAdapter, RegexMaskAdapter2 } from "@/src/imask";
 
 export type FormValues = {
+  laserCode: string;
   firstname: string;
   lastname: string;
   firstname2: string;
 }
 
 const schema = z.object({
+  laserCode: z.string().min(12, "Laser code is required"),
   firstname: z.string().min(1, "First name is required"),
   lastname: z.string().min(1, "Last name is required"),
   firstname2: z.string().min(1, "First name is required"),
@@ -20,6 +22,7 @@ const schema = z.object({
 export default function Page() {
   const { register, handleSubmit, formState: { isDirty, isValid}, control, watch } = useForm<FormValues>({
     defaultValues: {
+      laserCode: "",
       firstname: "สวัสดีเมือง",
       lastname: "ไทย",
       firstname2: "",
@@ -37,6 +40,39 @@ export default function Page() {
       spacing={2}
     >
       <Typography level="title-lg">Form</Typography>
+
+      <Stack
+        spacing={2}
+      >
+        <Typography level="title-lg">Laser Code: {watch('laserCode')}</Typography>
+        <Controller
+          name="laserCode"
+          control={control}
+          render={({ field }) => (
+            <Input
+              placeholder="Laser Code"
+              size="lg"
+              {...field}
+              sx={{
+                "& input": {
+                  color: "#0B0D0E",
+                },
+              }}
+              slotProps={{
+                input: {
+                  component: LaserCodeMaskAdapter,
+                  autoCorrect: "off",
+                  autoCapitalize: "off",
+                  autofix: false,
+                  autoComplete: "off",
+                  spellCheck: false,
+                },
+              }}
+            />
+          )}
+        />
+      </Stack>
+
       <Stack
         spacing={2}
       >

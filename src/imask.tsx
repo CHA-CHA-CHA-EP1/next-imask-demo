@@ -11,6 +11,51 @@ export type IMaskDefinition = {
   [key: string]: RegExp;
 };
 
+const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
+  function LaserCodeMaskAdapter(props, ref: React.Ref<any>) {
+    const { onChange, ...other } = props;
+    const [onFocus, setOnFocus] = useState(false);
+    return (
+      <IMaskInput
+        {...other}
+        mask={onFocus ? "##0000000000" : "##0 0000000 00"}
+        definitions={{
+          "#": /[A-Z]/,
+          "0": /[0-9]/,
+        }}
+        prepareChar={(str: string) => str.toUpperCase()}
+        inputRef={ref}
+        onAccept={(value: any) =>
+          onChange({ target: { name: props.name, value } })
+        }
+        onFocus={() => {
+          setOnFocus(true);
+        }}
+        onBlur={() => {
+          setOnFocus(false);
+        }}
+        autoCorrect="off"
+        onInput={(e: any) => {
+          if (e.target.value.length > 12) {
+            e.target.value = props.value;
+            return;
+          }
+
+          let getLastChar = e.target.value.slice(-1);
+          // english char match index 0, 1 and 2 - 11 is number
+          if (getLastChar.match(/[A-Z]/) && e.target.value.length < 3) {
+            return;
+          } else if (getLastChar.match(/[0-9]/) && e.target.value.length > 2) {
+            return;
+          } else {
+            e.target.value = props.value;
+          }
+        }}
+      />
+    );
+  },
+);
+
 const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
   function RegexMaskAdapter(props, ref: React.Ref<any>) {
     const { onChange, ...other } = props;
@@ -91,6 +136,7 @@ const RegexMaskAdapter2 = forwardRef<HTMLElement, IMaskProps & { mask: string; m
 
 export {
   RegexMaskAdapter,
-  RegexMaskAdapter2
+  RegexMaskAdapter2,
+  LaserCodeMaskAdapter
 };
 
