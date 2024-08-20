@@ -15,6 +15,8 @@ const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
   function LaserCodeMaskAdapter(props, ref: React.Ref<any>) {
     const { onChange, ...other } = props;
     const [onFocus, setOnFocus] = useState(false);
+    const [currentValue, setCurrentValue] = useState("");
+
     return (
       <IMaskInput
         {...other}
@@ -35,22 +37,22 @@ const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
         onBlur={() => {
           setOnFocus(false);
         }}
+        value={currentValue}
         autoCorrect="off"
         onInput={(e: any) => {
-          console.log(e.target.value);
-          if (e.target.value.length > 12) {
-            e.target.value = props.value;
-            return;
+          if (e.target.value.length > 12) { 
+            e.target.value = currentValue;
+            return
           }
 
           let getLastChar = e.target.value.slice(-1);
           // english char match index 0, 1 and 2 - 11 is number
-          if (getLastChar.match(/[A-Z]/) && e.target.value.length < 3) {
-            return;
+          if (getLastChar.match(/[A-Za-z]/) && e.target.value.length < 3) {
+            setCurrentValue(e.target.value);
           } else if (getLastChar.match(/[0-9]/) && e.target.value.length > 2) {
-            return;
+            setCurrentValue(e.target.value);
           } else {
-            e.target.value = props.value;
+            e.target.value = currentValue;
           }
         }}
       />
