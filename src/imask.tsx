@@ -80,16 +80,25 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
           onChange({ target: { name: props.name, value: currentValue } });
         }}
         onInput={(e: any) => {
-          console.log("on input", e.target.value, 'current value: ', currentValue)
-          if (e.target.value.length > 40) { 
+          const inputElement = e.target;
+          const cursorPosition = inputElement.selectionStart;
+
+          if (e.target.value.length > 40) {
             e.target.value = currentValue;
-            return
+            inputElement.setSelectionRange(cursorPosition, cursorPosition);
+            return;
           }
 
           if (e.target.value.match(new RegExp(props.mask))) {
             setCurrentValue(e.target.value);
+            setTimeout(() => {
+              inputElement.setSelectionRange(cursorPosition, cursorPosition);
+            }, 0);
           } else {
             e.target.value = currentValue;
+            setTimeout(() => {
+              inputElement.setSelectionRange(cursorPosition, cursorPosition);
+            }, 0);
           }
         }}
       />
