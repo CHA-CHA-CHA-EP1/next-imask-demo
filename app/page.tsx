@@ -20,8 +20,8 @@ const schema = z.object({
 export default function Page() {
   const { register, handleSubmit, formState: { isDirty, isValid}, control, watch } = useForm<FormValues>({
     defaultValues: {
-      firstname: "",
-      lastname: "",
+      firstname: "สวัสดีเมือง",
+      lastname: "ไทย",
       firstname2: "",
     },
     resolver: zodResolver(schema),
