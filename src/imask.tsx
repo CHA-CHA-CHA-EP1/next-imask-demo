@@ -27,9 +27,10 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
         onAccept={(value: any) => {
           console.log("onAccept: ", value);
           setCurrentValue(value);
-          onChange({ target: { name: props.name, value } });
+          onChange({ target: { name: props.name, value: currentValue } });
         }}
         onInput={(e: any) => {
+          e.target.value = currentValue;
           console.log("on input", e.target.value);
         }}
       />
