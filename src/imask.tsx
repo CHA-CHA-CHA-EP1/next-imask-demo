@@ -86,14 +86,10 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
             return
           }
 
-          let getLastChar = e.target.value.slice(-1);
-          console.log('getLastChar: ', getLastChar);
-          if (getLastChar.match(new RegExp(props.mask))) {
-            console.log('match');
+          if (e.target.value.match(new RegExp(props.mask))) {
             setCurrentValue(e.target.value);
           } else {
             e.target.value = currentValue;
-            console.log('not match');
           }
         }}
       />
