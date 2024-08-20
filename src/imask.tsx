@@ -23,14 +23,15 @@ const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
         mask={onFocus ? "##0000000000" : "##0 0000000 00"}
         unmask={true}
         definitions={{
-          "#": /[A-Z]/,
+          "#": /[A-Za-z]/,
           "0": /[0-9]/,
         }}
         prepareChar={(str: string) => str.toUpperCase()}
         inputRef={ref}
-        onAccept={(value: any) =>
-          onChange({ target: { name: props.name, value } })
-        }
+        onAccept={(value: any) =>{
+          setCurrentValue(value)
+          onChange({ target: { name: props.name, value: currentValue} })
+        }}
         onFocus={() => {
           setOnFocus(true);
         }}
