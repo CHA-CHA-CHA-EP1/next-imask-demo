@@ -19,6 +19,7 @@ const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
       <IMaskInput
         {...other}
         mask={onFocus ? "##0000000000" : "##0 0000000 00"}
+        unmask={true}
         definitions={{
           "#": /[A-Z]/,
           "0": /[0-9]/,
@@ -36,6 +37,7 @@ const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
         }}
         autoCorrect="off"
         onInput={(e: any) => {
+          console.log(e.target.value);
           if (e.target.value.length > 12) {
             e.target.value = props.value;
             return;
