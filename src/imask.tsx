@@ -37,6 +37,7 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
             console.log('match');
             setCurrentValue(e.target.value);
           } else {
+            e.target.value = currentValue;
             console.log('not match');
           }
         }}
