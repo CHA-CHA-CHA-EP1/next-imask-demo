@@ -31,6 +31,11 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
         }}
         onInput={(e: any) => {
           console.log("on input", e.target.value, 'current value: ', currentValue)
+          if (e.target.value.length > 40) { 
+            e.target.value = currentValue;
+            return
+          }
+
           let getLastChar = e.target.value.slice(-1);
           console.log('getLastChar: ', getLastChar);
           if (getLastChar.match(new RegExp(props.mask))) {
