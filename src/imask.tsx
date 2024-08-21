@@ -82,27 +82,35 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
         onInput={(e: any) => {
           const newValue = e.target.value;
           const prevValue = currentValue;
-          const InputElement = e.target as HTMLInputElement;
-          let isValid = true;
-          let wrongIndex = -1;
-          const cursorPosition = InputElement.selectionStart ?? 0;
+          const inputElement = e.target;
+          const cursorPosition = inputElement.selectionStart ?? 0;
 
-          for (let i = 0; i < newValue.length; i++) {
-            if (!newValue[i].match(new RegExp(props.mask))) {
-              isValid = false;
-              wrongIndex = i;
-              break;
+          let isValid = true;
+          let wrongIndex = null;
+
+          if (newValue.length > prevValue.length) {
+            for (let i = 0; i < newValue.length; i++) {
+              if (newValue[i] !== prevValue[i]) {
+                if (!newValue[i].match(props.mask)) {
+                  isValid = false;
+                  wrongIndex = i;
+                  break;
+                }
+              }
             }
           }
-
+          
           if (!isValid) {
-            InputElement.value = prevValue;
-            InputElement.setSelectionRange(wrongIndex, wrongIndex);
+            setCurrentValue(prevValue);
+            inputElement.setSelectionRange(wrongIndex, wrongIndex);
             return;
+          } else {
+            setCurrentValue(newValue);
+            // set cursor cursorPosition
+            console.log("cursorPosition: ", cursorPosition);
+            inputElement.setSelectionRange(cursorPosition, cursorPosition);
           }
 
-          setCurrentValue(newValue);
-          InputElement.setSelectionRange(cursorPosition, cursorPosition);
         }}
         onBlur={() => {
           onChange({ target: { name: props.name, value: currentValue } });
