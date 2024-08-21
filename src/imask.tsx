@@ -85,6 +85,7 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
           const InputElement = e.target as HTMLInputElement;
           let isValid = true;
           let wrongIndex = -1;
+          const cursorPosition = InputElement.selectionStart ?? 0;
 
           for (let i = 0; i < newValue.length; i++) {
             if (!newValue[i].match(new RegExp(props.mask))) {
@@ -101,6 +102,7 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
           }
 
           setCurrentValue(newValue);
+          InputElement.setSelectionRange(cursorPosition, cursorPosition);
         }}
         onBlur={() => {
           onChange({ target: { name: props.name, value: currentValue } });
