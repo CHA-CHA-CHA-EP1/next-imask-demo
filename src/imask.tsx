@@ -39,7 +39,6 @@ const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
           setOnFocus(false);
         }}
         value={currentValue}
-        autoCorrect="off"
         onInput={(e: any) => {
           const prevValue = currentValue;
           const inputElement = e.target as HTMLInputElement;
@@ -79,6 +78,11 @@ const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
             inputElement.setSelectionRange(wrongIndex, wrongIndex);
           }
         }}
+        autoCorrect="off"
+        autoCapitalize="off"
+        autofix={false}
+        autoComplete="off"
+        spellCheck={false}
       />
     );
   },
