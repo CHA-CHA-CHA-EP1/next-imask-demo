@@ -85,12 +85,14 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
           const prevValue = currentValue;
           const inputElement = e.target;
           const cursorPosition = inputElement.selectionStart ?? 0;
+          console.log("c: ", cursorPosition);
 
           if (e.target.value.length > 40) {
-            e.target.value = currentValue;
             requestAnimationFrame(() => {
+              console.log("c: ", cursorPosition);
               inputElement.setSelectionRange(cursorPosition - 1, cursorPosition - 1);
             })
+            e.target.value = currentValue;
             return;
           }
 
