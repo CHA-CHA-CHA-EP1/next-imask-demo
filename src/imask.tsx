@@ -48,13 +48,13 @@ const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
           let wrongIndex = null;
           for (let i = 0; i < newValue.length; i++) {
             if (i < 2) {
-              if (!newValue[i].match(/[A-Za-z]/)) {
+              if (!newValue[i].match(/[A-Za-z ]/)) {
                 isValid = false;
                 wrongIndex = i;
                 break;
               }
             } else {
-              if (!newValue[i].match(/[0-9]/)) {
+              if (!newValue[i].match(/[0-9 ]/)) {
                 isValid = false;
                 wrongIndex = i;
                 break;
