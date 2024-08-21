@@ -89,7 +89,7 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
           if (e.target.value.length > 40) {
             e.target.value = currentValue;
             requestAnimationFrame(() => {
-              inputElement.setSelectionRange(cursorPosition, cursorPosition);
+              inputElement.setSelectionRange(cursorPosition - 1, cursorPosition - 1);
             })
             return;
           }
