@@ -42,7 +42,7 @@ const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
         onInput={(e: any) => {
           const prevValue = currentValue;
           const inputElement = e.target as HTMLInputElement;
-          const newValue = e.target.value;
+          const newValue = e.target.value.replace(/ /g, "");
 
           let isValid = true;
           let wrongIndex = null;
