@@ -28,9 +28,9 @@ const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
         }}
         prepareChar={(str: string) => str.toUpperCase()}
         inputRef={ref}
-        onAccept={(value: any) =>{
-          setCurrentValue(value)
-          onChange({ target: { name: props.name, value: currentValue} })
+        onAccept={(value: any) => {
+          setCurrentValue(value);
+          onChange({ target: { name: props.name, value: currentValue } });
         }}
         onFocus={() => {
           setOnFocus(true);
@@ -41,25 +41,49 @@ const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
         value={currentValue}
         autoCorrect="off"
         onInput={(e: any) => {
-          if (e.target.value.length > 12) { 
-            e.target.value = currentValue;
-            return
+          const prevValue = currentValue;
+          const inputElement = e.target as HTMLInputElement;
+          const newValue = e.target.value;
+
+          let isValid = true;
+          let wrongIndex = null;
+          for (let i = 0; i < newValue.length; i++) {
+            if (i < 2) {
+              if (!newValue[i].match(/[A-Za-z]/)) {
+                isValid = false;
+                wrongIndex = i;
+                break;
+              }
+            } else {
+              if (!newValue[i].match(/[0-9]/)) {
+                isValid = false;
+                wrongIndex = i;
+                break;
+              }
+            }
           }
 
-          let getLastChar = e.target.value.slice(-1);
-          // english char match index 0, 1 and 2 - 11 is number
-          if (getLastChar.match(/[A-Za-z]/) && e.target.value.length < 3) {
-            setCurrentValue(e.target.value);
-          } else if (getLastChar.match(/[0-9]/) && e.target.value.length > 2) {
-            setCurrentValue(e.target.value);
-          } else {
+          if (e.target.value.length > 12 && wrongIndex) {
             e.target.value = currentValue;
+            inputElement.setSelectionRange(
+              currentValue.length,
+              currentValue.length,
+            );
+            return;
+          }
+
+          if (isValid && !wrongIndex) {
+            setCurrentValue(newValue);
+          } else {
+            e.target.value = prevValue;
+            inputElement.setSelectionRange(wrongIndex, wrongIndex);
           }
         }}
       />
     );
   },
 );
+
 
 const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
   function RegexMaskAdapter(props, ref: React.Ref<any>) {
@@ -75,7 +99,6 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
         inputRef={ref}
         value={currentValue}
         onAccept={(value: any) => {
-          console.log("onAccept: ", value);
           setCurrentValue(value);
           onChange({ target: { name: props.name, value: currentValue } });
         }}
@@ -85,11 +108,9 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
           const prevValue = currentValue;
           const inputElement = e.target;
           const cursorPosition = inputElement.selectionStart ?? 0;
-          console.log("c: ", cursorPosition);
 
           if (e.target.value.length > 40) {
             requestAnimationFrame(() => {
-              console.log("c: ", cursorPosition);
               inputElement.setSelectionRange(cursorPosition - 1, cursorPosition - 1);
             })
             e.target.value = currentValue;
