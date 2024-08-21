@@ -103,11 +103,17 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
           if (!isValid) {
             e.target.value = prevValue;
             inputElement.setSelectionRange(wrongIndex, wrongIndex);
+            requestAnimationFrame(() => {
+              inputElement.setSelectionRange(wrongIndex, wrongIndex);
+            });
             return;
           } else {
             setCurrentValue(newValue);
             // set cursor cursorPosition
             console.log("cursorPosition2: ", cursorPosition);
+            requestAnimationFrame(() => {
+              inputElement.setSelectionRange(cursorPosition, cursorPosition);
+            });
             e.target.setSelectionRange(cursorPosition, cursorPosition);
           }
 
