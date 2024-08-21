@@ -81,16 +81,19 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
         }}
         overwrite={false}
         onInput={(e: any) => {
-
-          if (e.target.value.length > 40) {
-            e.target.value = currentValue;
-            return;
-          }
-
           const newValue = e.target.value;
           const prevValue = currentValue;
           const inputElement = e.target;
           const cursorPosition = inputElement.selectionStart ?? 0;
+
+          if (e.target.value.length > 40) {
+            e.target.value = currentValue;
+            requestAnimationFrame(() => {
+              inputElement.setSelectionRange(cursorPosition, cursorPosition);
+            })
+            return;
+          }
+
 
           let isValid = true;
           let wrongIndex = null;
