@@ -29,6 +29,7 @@ const LaserCodeMaskAdapter = forwardRef<HTMLElement, IMaskProps>(
         prepareChar={(str: string) => str.toUpperCase()}
         inputRef={ref}
         onAccept={(value: any) => {
+          value = value.replace(/ /g, "");
           setCurrentValue(value);
           onChange({ target: { name: props.name, value: currentValue } });
         }}
