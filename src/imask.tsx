@@ -79,29 +79,31 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
           setCurrentValue(value);
           onChange({ target: { name: props.name, value: currentValue } });
         }}
-        // onInput={(e: any) => {
-        //   console.log(currentValue);
-        //   if (e.target.value.length > 40) {
-        //     e.target.value = currentValue;
-        //     return;
-        //   }
+        onInput={(e: any) => {
+          const newValue = e.target.value;
+          const prevValue = currentValue;
+          const InputElement = e.target as HTMLInputElement;
+          let isValid = true;
+          let wrongIndex = -1;
 
-        //   //if (new RegExp(props.mask).test(e.target.value)) {
-        //   //  setCurrentValue(e.target.value);
-        //   //  e.target.setSelectionRange(
-        //   //    currentValue.length,
-        //   //    currentValue.length,
-        //   //  );
-        //   //} else {
-        //   //  e.target.value = currentValue;
-        //   //}
-        // }}
+          for (let i = 0; i < newValue.length; i++) {
+            if (!newValue[i].match(new RegExp(props.mask))) {
+              isValid = false;
+              wrongIndex = i;
+              break;
+            }
+          }
+
+          if (!isValid) {
+            InputElement.value = prevValue;
+            InputElement.setSelectionRange(wrongIndex, wrongIndex);
+            return;
+          }
+
+          setCurrentValue(newValue);
+        }}
         onBlur={() => {
           onChange({ target: { name: props.name, value: currentValue } });
-        }}
-        onKeyDown={(e: any) => {
-          console.log("onKeyDown: ", e.key);
-          e.target.value = currentValue;
         }}
 
       />
