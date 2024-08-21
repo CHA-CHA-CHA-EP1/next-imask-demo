@@ -79,27 +79,29 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
           setCurrentValue(value);
           onChange({ target: { name: props.name, value: currentValue } });
         }}
-        onInput={(e: any) => {
-          console.log(currentValue);
-          if (e.target.value.length > 40) {
-            e.target.value = currentValue;
-            return;
-          }
+        // onInput={(e: any) => {
+        //   console.log(currentValue);
+        //   if (e.target.value.length > 40) {
+        //     e.target.value = currentValue;
+        //     return;
+        //   }
 
-          if (new RegExp(props.mask).test(e.target.value)) {
-            setCurrentValue(e.target.value);
-            // disable cursor move to end of input when edit text any position 
-
-            const start = e.target.selectionStart;
-            const end = e.target.selectionEnd;
-            e.target.value = currentValue;
-            e.target.setSelectionRange(start, end);
-          } else {
-            e.target.value = currentValue;
-          }
-        }}
+        //   //if (new RegExp(props.mask).test(e.target.value)) {
+        //   //  setCurrentValue(e.target.value);
+        //   //  e.target.setSelectionRange(
+        //   //    currentValue.length,
+        //   //    currentValue.length,
+        //   //  );
+        //   //} else {
+        //   //  e.target.value = currentValue;
+        //   //}
+        // }}
         onBlur={() => {
           onChange({ target: { name: props.name, value: currentValue } });
+        }}
+        onKeyDown={(e: any) => {
+          console.log("onKeyDown: ", e.key);
+          e.target.value = currentValue;
         }}
 
       />
