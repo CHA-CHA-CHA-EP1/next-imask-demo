@@ -88,6 +88,12 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
 
           if (new RegExp(props.mask).test(e.target.value)) {
             setCurrentValue(e.target.value);
+            // disable cursor move to end of input when edit text any position 
+
+            const start = e.target.selectionStart;
+            const end = e.target.selectionEnd;
+            e.target.value = currentValue;
+            e.target.setSelectionRange(start, end);
           } else {
             e.target.value = currentValue;
           }
