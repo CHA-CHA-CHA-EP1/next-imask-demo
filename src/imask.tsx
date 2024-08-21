@@ -115,7 +115,11 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
         onBlur={() => {
           onChange({ target: { name: props.name, value: currentValue } });
         }}
-
+        autoCorrect="off"
+        autoCapitalize="off"
+        autofix={false}
+        autoComplete="off"
+        spellCheck={false}
       />
     );
   },
