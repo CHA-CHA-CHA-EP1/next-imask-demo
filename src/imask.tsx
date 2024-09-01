@@ -189,8 +189,7 @@ const RegexMaskAdapter2 = forwardRef<HTMLElement, IMaskProps & { mask: string; m
         }}
         onInput={(e: any) => {
           console.log(e.target.value);
-          e.target.selectionStart = e.target.value.length;
-          e.target.selectionEnd = e.target.value.length;
+          e.target.selectionStart = 0;
         }}
         overwrite={false}
         autoCorrect="off"
