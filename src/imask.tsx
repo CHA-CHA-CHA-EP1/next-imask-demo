@@ -191,7 +191,7 @@ const RegexMaskAdapter2 = forwardRef<HTMLElement, IMaskProps & { mask: string; m
           console.log(e.target.value);
           // if test regexp failed, revert to previous value
           if (!new RegExp(props.mask).test(e.target.value)) {
-            // e.target.value = props.value;
+            e.target.value = props.value;
             e.target.selectionStart = e.target.selectionEnd = props.value.length;
             return;
           }
