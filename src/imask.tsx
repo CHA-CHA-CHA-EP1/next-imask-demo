@@ -176,37 +176,28 @@ const RegexMaskAdapter = forwardRef<HTMLElement, IMaskProps & { mask: string }>(
 
 const RegexMaskAdapter2 = forwardRef<HTMLElement, IMaskProps & { mask: string; maxLength?: number }>(
   function RegexMaskAdapter(props, ref: React.Ref<any>) {
-    const { onChange, maxLength, ...other } = props;
- 
-    const handleKeyPress = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
-      const keyCode = event.which || event.keyCode;
-      if (keyCode < 65 || keyCode > 90) {
-        event.preventDefault();
-      }
-    }, []);
- 
-    const handleAccept = useCallback((value: string) => {
-      if (maxLength) {
-        // Use a function to count Thai characters correctly
-        const thaiLength = (str: string) => {
-          return str.replace(/[\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]/g, '').length;
-        };
- 
-        if (thaiLength(value) > maxLength) {
-          return;
-        }
-      }
- 
-      onChange({ target: { name: props.name, value } });
-    }, [onChange, props.name, maxLength]);
- 
+    const { onChange, ...other } = props;
+
     return (
       <IMaskInput
         {...other}
         mask={new RegExp(props.mask)}
         inputRef={ref}
-        onAccept={handleAccept}
-        onInput={handleKeyPress}
+        value={props.value}
+        onAccept={(value: any) => {
+          onChange({ target: { name: props.name, value: value } });
+        }}
+        onInput={(e: any) => {
+          console.log(e.target.value);
+          e.target.selectionStart = e.target.value.length;
+          e.target.selectionEnd = e.target.value.length;
+        }}
+        overwrite={false}
+        autoCorrect="off"
+        autoCapitalize="off"
+        autofix={false}
+        autoComplete="off"
+        spellCheck={false}
       />
     );
   },
