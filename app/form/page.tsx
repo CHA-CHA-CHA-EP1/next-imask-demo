@@ -6,18 +6,18 @@ import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export type FormValues = {
-  laserCode: string;
+  firstname: string;
 }
 
 const schema = z.object({
-  laserCode: z.string()
-    .min(12, "Laser code is required")
+  firstname: z.string()
+    .min(1, "fristname is required")
 });
 
 export default function Page() {
   const { register, watch, control, formState} = useForm<FormValues>({
     defaultValues: {
-      laserCode: "",
+      firstname: "",
     },
     resolver: zodResolver(schema),
     mode: "onBlur",
@@ -25,7 +25,7 @@ export default function Page() {
 
   const { errors, isDirty, isValid } = formState;
 
-  console.log('version 5')
+  console.log('version 6')
 
   return (
     <Stack
@@ -38,25 +38,24 @@ export default function Page() {
     >
       <form onSubmit={(e) => e.preventDefault()}>
         <Stack spacing={2}>
-          <Typography level="title-lg">LaserCode: {watch('laserCode')}</Typography> 
+          <Typography level="title-lg">LaserCode: {watch('firstname')}</Typography> 
           <Input 
             placeholder="Laser Code"
             size="lg"
-            { ...register("laserCode") }
-            error={!!errors.laserCode}
+            { ...register("firstname") }
+            error={!!errors.firstname}
             slotProps={{
               input: {
+                onBeforeInput: (e) => {
+                  console.log('onBeforeInput', e.currentTarget.value)
+                },
                 onInput: (e) => {
-
+                  console.log('onInput', e.currentTarget.value)
                   if (e.currentTarget.value.length > 12) {
-                    // force not to type more than 12 characters
                     e.currentTarget.value = e.currentTarget.value.slice(0, 12);
                     return;
                   }
-
-
                   const value = e.currentTarget.value;
-                  console.log(value);
                   const newValue = value.replace(/[^ก-๙0-9(). -]/g, '');
                   e.currentTarget.value = newValue;
                 },
@@ -64,8 +63,8 @@ export default function Page() {
               }
             }}
           />
-          { errors.laserCode && (
-            <Typography sx={{color: 'red', margin: 0, padding: 0}}>{errors.laserCode.message}</Typography>
+          { errors.firstname && (
+            <Typography sx={{color: 'red', margin: 0, padding: 0}}>{errors.firstname.message}</Typography>
           )}
           <DevTool 
             control={control} 
