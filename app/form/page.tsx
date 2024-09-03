@@ -4,24 +4,39 @@ import { useForm } from "react-hook-form";
 import { z  } from 'zod';
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { IMask } from "react-imask";
 
 export type FormValues = {
   firstname: string;
   laserCode: string;
 }
 
+const formatLaserCode = (value: string) => {
+  const maskOptions = {
+    mask: "##0 0000000 00",
+    definitions: {
+      "#": /[A-Za-z]/,
+      "0": /[0-9]/
+    }
+  }
+  const masked = IMask.createMask(maskOptions);
+  masked.value = value;
+  return masked.value;
+}
+
 const schema = z.object({
   firstname: z.string()
     .min(1, "fristname is required"),
   laserCode: z.string()
-    .min(1, "laser code is required"),
+    .min(1, "laser code is required")
+    .transform((val) => val.replace(/\s/g, ''))
 });
 
 export default function Page() {
-  const { register, watch, control, formState, getValues} = useForm<FormValues>({
+  const { register, watch, control, formState, getValues, setValue} = useForm<FormValues>({
     defaultValues: {
       firstname: "",
-      laserCode: "",
+      laserCode: formatLaserCode("DD1122993616"),
     },
     resolver: zodResolver(schema),
     mode: "onBlur",
@@ -77,6 +92,12 @@ export default function Page() {
               { ...register("laserCode") }
               type="text"
               error={!!errors.laserCode}
+              onBlur={() => {
+                setValue("laserCode", formatLaserCode(getValues("laserCode")));
+              }}
+              onFocus={() => {
+                setValue("laserCode", getValues("laserCode").replace(/\s/g, ''));
+              }}
               slotProps={{
                 input: {
                   onInput: (e: any) => {
@@ -99,7 +120,7 @@ export default function Page() {
                       }
                     }
                   },
-                  maxLength: 12
+                  maxLength: 14
                 }
               }}
             />
