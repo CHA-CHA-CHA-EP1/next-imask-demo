@@ -5,6 +5,7 @@ import { z  } from 'zod';
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IMask } from "react-imask";
+import { useEffect } from "react";
 
 export type FormValues = {
   firstname: string;
@@ -34,7 +35,7 @@ const schema = z.object({
 });
 
 export default function Page() {
-  const { register, watch, control, formState, getValues, setValue, trigger} = useForm<FormValues>({
+  const { register, watch, control, formState, getValues, setValue, trigger, reset} = useForm<FormValues>({
     defaultValues: {
       firstname: "",
       laserCode: "",
@@ -44,6 +45,15 @@ export default function Page() {
   });
 
   const { errors, isDirty, isValid } = formState;
+
+  useEffect(() => {
+    setTimeout(() => {
+      reset({
+        firstname: "สวัสดีเมือง",
+        laserCode: formatLaserCode("ME1122993616"),
+      });
+    }, 5000);
+  }, [])
 
   console.log('version 18')
 
