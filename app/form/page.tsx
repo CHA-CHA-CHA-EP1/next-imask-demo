@@ -82,12 +82,22 @@ export default function Page() {
                   onInput: (e: any) => {
                     const oldValue = getValues("laserCode");
                     const value = e.currentTarget.value;
-                    const regEx = /^[A-Za-z]{0,2}[0-9]{0,10}$/;
-                    if (!regEx.test(value)) {
-                      e.target.value = oldValue;
+                    
+                    if (value.length > 12) {
+                      e.currentTarget.value = oldValue;
                       return;
                     }
-                    e.currentTarget.value = value;
+                    
+                    if (value.length <= 2) {
+                      e.currentTarget.value = value.replace(/[^A-Z]/g, '');
+                    } else {
+                      const newValue = value.replace(/[^A-Z0-9]/g, '');
+                      if (!/^[A-Z]{2}[0-9]*$/.test(newValue)) {
+                        e.currentTarget.value = oldValue;
+                      } else {
+                        e.currentTarget.value = newValue;
+                      }
+                    }
                   },
                   maxLength: 12
                 }
