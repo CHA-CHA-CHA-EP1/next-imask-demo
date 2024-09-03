@@ -15,7 +15,7 @@ const schema = z.object({
 });
 
 export default function Page() {
-  const { register, watch, control, formState} = useForm<FormValues>({
+  const { register, watch, control, formState, getValues} = useForm<FormValues>({
     defaultValues: {
       firstname: "",
     },
@@ -25,7 +25,7 @@ export default function Page() {
 
   const { errors, isDirty, isValid } = formState;
 
-  console.log('version 11')
+  console.log('version 12')
 
   return (
     <Stack
@@ -49,17 +49,20 @@ export default function Page() {
               input: {
                 onInput: (e: any) => {
                   console.log('onInput', e.currentTarget.value)
+                  console.log('data', e.data);
                   if (e.currentTarget.value.length > 12) {
                     //e.currentTarget.value = e.currentTarget.value.slice(0, 12);
                     e.target.selectionStart = e.target.selectionEnd = e.target.value.length;
-                    e.nativeEvent.preventDefault();
-                    e.nativeEvent.stopPropagation();
+                    e.preventDefault();
+
+                    console.log('form value', getValues("firstname"))
                   }
+
                   const value = e.currentTarget.value;
                   const newValue = value.replace(/[^ก-๙0-9(). -]/g, '');
                   e.currentTarget.value = newValue;
                 },
-                maxLength: 12
+                // maxLength: 12
               }
             }}
           />
