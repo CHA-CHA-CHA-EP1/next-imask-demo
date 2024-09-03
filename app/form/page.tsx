@@ -85,7 +85,7 @@ export default function Page() {
 
                     let regEx = null;
                     if (value.length > 0) {
-                      regEx = /^[A-Za-z]{2}/;
+                      regEx = /^[A-Za-z]/;
                     } else if(value.length > 2) {
                       regEx = /^[A-Za-z]{2}[0-9]{1,}/;
                     } 
@@ -100,8 +100,8 @@ export default function Page() {
                 }
               }}
             />
-            { errors.firstname && (
-              <Typography sx={{color: 'red', margin: 0, padding: 0}}>{errors.firstname.message}</Typography>
+            { errors.laserCode && (
+              <Typography sx={{color: 'red', margin: 0, padding: 0}}>{errors.laserCode.message}</Typography>
             )}
           </Box>
           <DevTool 
