@@ -82,15 +82,8 @@ export default function Page() {
                   onInput: (e: any) => {
                     const oldValue = getValues("laserCode");
                     const value = e.currentTarget.value;
-
-                    let regEx = null;
-                    if (value.length > 0) {
-                      regEx = /^[A-Za-z]/;
-                    } else if(value.length > 2) {
-                      regEx = /^[A-Za-z]{2}[0-9]{1,}/;
-                    } 
-
-                    if (regEx && !regEx.test(value)) {
+                    const regEx = /^[A-Za-z]{0,2}[0-9]{0,10}$/;
+                    if (!regEx.test(value)) {
                       e.target.value = oldValue;
                       return;
                     }
