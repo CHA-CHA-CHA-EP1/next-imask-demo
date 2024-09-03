@@ -25,7 +25,7 @@ export default function Page() {
 
   const { errors, isDirty, isValid } = formState;
 
-  console.log('version 6')
+  console.log('version 7')
 
   return (
     <Stack
@@ -46,13 +46,11 @@ export default function Page() {
             error={!!errors.firstname}
             slotProps={{
               input: {
-                onBeforeInput: (e) => {
-                  console.log('onBeforeInput', e.currentTarget.value)
-                },
-                onInput: (e) => {
+                onInput: (e: any) => {
                   console.log('onInput', e.currentTarget.value)
                   if (e.currentTarget.value.length > 12) {
-                    e.currentTarget.value = e.currentTarget.value.slice(0, 12);
+                    // e.currentTarget.value = e.currentTarget.value.slice(0, 12);
+                    e.target.selectionStart = e.target.selectionEnd = e.target.value.length;
                     return;
                   }
                   const value = e.currentTarget.value;
