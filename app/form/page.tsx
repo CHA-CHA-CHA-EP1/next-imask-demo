@@ -29,7 +29,7 @@ export default function Page() {
 
   const { errors, isDirty, isValid } = formState;
 
-  console.log('version 14')
+  console.log('version 15')
 
   return (
     <Stack
@@ -82,11 +82,11 @@ export default function Page() {
                   onInput: (e: any) => {
                     const oldValue = getValues("laserCode");
                     const value = e.currentTarget.value;
-                    const newValue = value.replace(/[^A-Z0-9]/g, '');
-                    if (newValue.length > 0 && newValue.length < 2 && !/[A-Za-z]/.test(newValue)) {
+                    const newValue = value.replace(/[^A-Za-z0-9]/g, '');
+                    if (newValue.length > 0 && newValue.length <= 2 && !/[A-Za-z]/.test(newValue)) {
                       e.target.value = oldValue;
                       return;
-                    } else if (newValue.length > 1 && newValue.length < 13 && !/[0-9]/.test(newValue)) {
+                    } else if (newValue.length > 2 && newValue.length < 13 && !/[0-9]/.test(newValue)) {
                       e.target.value = oldValue;
                       return;
                     } else if (newValue.length > 12) {
