@@ -29,14 +29,15 @@ const schema = z.object({
     .min(1, "fristname is required"),
   laserCode: z.string()
     .min(1, "laser code is required")
-    .transform((val) => val.replace(/\s/g, ''))
+    .regex(/^[a-zA-Z]{2}[0-9]{10}/, "Invalid laser code")
+    // .transform((val) => val.replace(/\s/g, ''))
 });
 
 export default function Page() {
-  const { register, watch, control, formState, getValues, setValue} = useForm<FormValues>({
+  const { register, watch, control, formState, getValues, setValue, trigger} = useForm<FormValues>({
     defaultValues: {
       firstname: "",
-      laserCode: formatLaserCode("DD1122993616"),
+      laserCode: "",
     },
     resolver: zodResolver(schema),
     mode: "onBlur",
@@ -93,6 +94,11 @@ export default function Page() {
               type="text"
               error={!!errors.laserCode}
               onBlur={() => {
+                trigger("laserCode");
+
+                if (getValues("laserCode").length < 12) {
+                  return;
+                }
                 setValue("laserCode", formatLaserCode(getValues("laserCode")));
               }}
               onFocus={() => {
@@ -102,7 +108,7 @@ export default function Page() {
                 input: {
                   onInput: (e: any) => {
                     const oldValue = getValues("laserCode");
-                    const value = e.currentTarget.value;
+                    const value = e.currentTarget.value.toUpperCase();
                     
                     if (value.length > 12) {
                       e.currentTarget.value = oldValue;
@@ -110,10 +116,10 @@ export default function Page() {
                     }
                     
                     if (value.length <= 2) {
-                      e.currentTarget.value = value.replace(/[^A-Z]/g, '');
+                      e.currentTarget.value = value.replace(/[^A-Za-z]/g, '');
                     } else {
-                      const newValue = value.replace(/[^A-Z0-9]/g, '');
-                      if (!/^[A-Z]{2}[0-9]*$/.test(newValue)) {
+                      const newValue = value.replace(/[^A-Za-z0-9]/g, '');
+                      if (!/^[A-Za-z]{2}[0-9]*$/.test(newValue)) {
                         e.currentTarget.value = oldValue;
                       } else {
                         e.currentTarget.value = newValue;
