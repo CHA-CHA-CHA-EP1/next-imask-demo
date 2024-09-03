@@ -26,6 +26,12 @@ export default function Page() {
 
   const { errors, isDirty, isValid } = formState;
 
+  const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "A" || e.key === "a" || e.key === "ก") {
+      e.preventDefault();
+    }
+  }
+  console.log('version 2')
 
   return (
     <Stack
@@ -46,10 +52,12 @@ export default function Page() {
             error={!!errors.laserCode}
             slotProps={{
               input: {
-                onKeyDown: (e) => {
-                  if (e.key === "A" || e.key === "a" || e.key === "ก") {
-                    e.preventDefault();
-                  }
+                onKeyDown: (e) => handleOnKeyDown(e),
+                onInput: (e) => {
+                  const value = e.currentTarget.value;
+                  console.log(value);
+                  const newValue = value.replace(/[^0-9]/g, '');
+                  e.currentTarget.value = newValue;
                 }
               }
             }}
