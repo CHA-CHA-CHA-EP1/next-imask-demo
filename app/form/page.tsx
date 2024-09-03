@@ -25,7 +25,7 @@ export default function Page() {
 
   const { errors, isDirty, isValid } = formState;
 
-  console.log('version 4')
+  console.log('version 5')
 
   return (
     <Stack
@@ -49,9 +49,11 @@ export default function Page() {
                 onInput: (e) => {
 
                   if (e.currentTarget.value.length > 12) {
-                    console.log('preventDefault');
-                    e.preventDefault();
+                    // force not to type more than 12 characters
+                    e.currentTarget.value = e.currentTarget.value.slice(0, 12);
+                    return;
                   }
+
 
                   const value = e.currentTarget.value;
                   console.log(value);
