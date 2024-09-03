@@ -25,7 +25,7 @@ export default function Page() {
 
   const { errors, isDirty, isValid } = formState;
 
-  console.log('version 9')
+  console.log('version 10')
 
   return (
     <Stack
@@ -53,11 +53,9 @@ export default function Page() {
                     //e.currentTarget.value = e.currentTarget.value.slice(0, 12);
                     e.preventDefault();
                     e.stopPropagation();
-                    e.stopImmediatePropagation();
                     e.nativeEvent.stopImmediatePropagation();
                     e.nativeEvent.preventDefault();
                     e.nativeEvent.stopPropagation();
-                    e.nativeEvent.stopImmediatePropagation();
                     e.target.selectionStart = e.target.selectionEnd = e.target.value.length;
                   }
                   const value = e.currentTarget.value;
