@@ -25,7 +25,7 @@ export default function Page() {
 
   const { errors, isDirty, isValid } = formState;
 
-  console.log('version 12')
+  console.log('version 13')
 
   return (
     <Stack
@@ -52,10 +52,9 @@ export default function Page() {
                   console.log('data', e.data);
                   if (e.currentTarget.value.length > 12) {
                     //e.currentTarget.value = e.currentTarget.value.slice(0, 12);
-                    e.target.selectionStart = e.target.selectionEnd = e.target.value.length;
-                    e.preventDefault();
-
-                    console.log('form value', getValues("firstname"))
+                    //e.target.selectionStart = e.target.selectionEnd = e.target.value.length;
+                    // console.log('form value', getValues("firstname"))
+                    e.target.value = getValues("firstname");
                   }
 
                   const value = e.currentTarget.value;
