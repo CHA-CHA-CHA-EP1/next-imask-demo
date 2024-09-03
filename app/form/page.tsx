@@ -25,7 +25,7 @@ export default function Page() {
 
   const { errors, isDirty, isValid } = formState;
 
-  console.log('version 3')
+  console.log('version 4')
 
   return (
     <Stack
@@ -47,6 +47,12 @@ export default function Page() {
             slotProps={{
               input: {
                 onInput: (e) => {
+
+                  if (e.currentTarget.value.length > 12) {
+                    console.log('preventDefault');
+                    e.preventDefault();
+                  }
+
                   const value = e.currentTarget.value;
                   console.log(value);
                   const newValue = value.replace(/[^ก-๙0-9(). -]/g, '');
