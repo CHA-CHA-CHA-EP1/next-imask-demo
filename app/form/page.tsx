@@ -54,8 +54,6 @@ export default function Page() {
     });
   }, [])
 
-  console.log('version 18')
-
   return (
     <Stack
       padding={2}
@@ -102,14 +100,19 @@ export default function Page() {
               { ...register("laserCode") }
               type="text"
               error={!!errors.laserCode}
-              onBlur={() => {
-                console.log('onBlur');
+              onBlur={(e: any) => {
+                const btnId = e.relatedTarget?.id;
+                if (btnId === "btn-clear") {
+                  return;
+                }
+
                 trigger("laserCode");
 
                 if (getValues("laserCode").length < 12) {
                   return;
                 }
                 setValue("laserCode", formatLaserCode(getValues("laserCode")));
+                setShowClearButton(false);
               }}
               onFocus={() => {
                 setValue("laserCode", getValues("laserCode").replace(/\s/g, ''));
@@ -117,8 +120,11 @@ export default function Page() {
               }}
               endDecorator={showClearButton && (
                 <Button
+                  type="button"
+                  id="btn-clear"
                   onClick={() => {
                     // setValue("laserCode", "");
+                    console.log('click')
                     setShowClearButton(false);
                     reset({
                       ...getValues(),
