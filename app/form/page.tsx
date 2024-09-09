@@ -5,7 +5,7 @@ import { z  } from 'zod';
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IMask } from "react-imask";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export type FormValues = {
   firstname: string;
@@ -35,6 +35,7 @@ const schema = z.object({
 });
 
 export default function Page() {
+  const [showClearButton, setShowClearButton] = useState(false);
   const { register, watch, control, formState, getValues, setValue, trigger, reset} = useForm<FormValues>({
     defaultValues: {
       firstname: "",
@@ -47,12 +48,10 @@ export default function Page() {
   const { errors, isDirty, isValid } = formState;
 
   useEffect(() => {
-    setTimeout(() => {
-      reset({
-        firstname: "สวัสดีเมือง",
-        laserCode: formatLaserCode("ME1122993616"),
-      });
-    }, 5000);
+    reset({
+      firstname: "สวัสดีเมือง",
+      laserCode: formatLaserCode("ME1122993616"),
+    });
   }, [])
 
   console.log('version 18')
@@ -104,6 +103,7 @@ export default function Page() {
               type="text"
               error={!!errors.laserCode}
               onBlur={() => {
+                console.log('onBlur');
                 trigger("laserCode");
 
                 if (getValues("laserCode").length < 12) {
@@ -113,7 +113,24 @@ export default function Page() {
               }}
               onFocus={() => {
                 setValue("laserCode", getValues("laserCode").replace(/\s/g, ''));
+                setShowClearButton(true);
               }}
+              endDecorator={showClearButton && (
+                <Button
+                  onClick={() => {
+                    // setValue("laserCode", "");
+                    setShowClearButton(false);
+                    reset({
+                      ...getValues(),
+                      laserCode: ""
+                    });
+
+                    trigger("laserCode");
+                  }}
+                >
+                  Clear
+                </Button>
+              )}
               slotProps={{
                 input: {
                   onInput: (e: any) => {
@@ -144,9 +161,6 @@ export default function Page() {
               <Typography sx={{color: 'red', margin: 0, padding: 0}}>{errors.laserCode.message}</Typography>
             )}
           </Box>
-          <DevTool 
-            control={control} 
-          />
           <Button
               type="submit"
               fullWidth={true}
