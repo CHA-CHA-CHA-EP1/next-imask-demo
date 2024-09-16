@@ -36,7 +36,7 @@ const schema = z.object({
 
 export default function Page() {
   const [showClearButton, setShowClearButton] = useState(false);
-  const { register, watch, control, formState, getValues, setValue, trigger, reset} = useForm<FormValues>({
+  const { register, watch, control, formState, getValues, setValue, trigger, reset, clearErrors} = useForm<FormValues>({
     defaultValues: {
       firstname: "",
       laserCode: "",
@@ -52,6 +52,37 @@ export default function Page() {
       firstname: "สวัสดีเมือง",
       laserCode: formatLaserCode("ME1122993616"),
     });
+  }, [])
+
+  useEffect(() => {
+    // visibilitychange
+    // const handleVisibilityChange = () => {
+    //   console.log('on visiblity change');
+    //   const inputs = document.querySelectorAll("input");
+    //   inputs.forEach((input) => {
+    //     if (document.activeElement === input) {
+    //       input.blur();
+    //     }
+    //   });
+    // }
+    
+    const handleViewportResize = () => {
+      const inputs = document.querySelectorAll("input");
+      inputs.forEach((input) => {
+        if (document.activeElement === input) {
+           const visualViewportHeight = window?.visualViewport?.height;
+           const actualHeight = window.innerHeight;
+           if (visualViewportHeight === actualHeight) {
+             input.blur();
+           }
+        }
+      });
+    }
+
+    window?.visualViewport?.addEventListener("resize", handleViewportResize);
+    return () => {
+      window?.visualViewport?.removeEventListener("resize", handleViewportResize);
+    }
   }, [])
 
   return (
@@ -73,6 +104,9 @@ export default function Page() {
               { ...register("firstname") }
               type="text"
               error={!!errors.firstname}
+              onFocus={() => {
+                clearErrors("firstname");
+              }}
               slotProps={{
                 input: {
                   onInput: (e: any) => {
@@ -101,6 +135,7 @@ export default function Page() {
               type="text"
               error={!!errors.laserCode}
               onBlur={(e: any) => {
+                console.log(e.relatedTarget);
                 const btnId = e.relatedTarget?.id;
                 if (btnId === "btn-clear") {
                   return;
@@ -142,24 +177,33 @@ export default function Page() {
                   onInput: (e: any) => {
                     const oldValue = getValues("laserCode");
                     const value = e.currentTarget.value.toUpperCase();
-                    
-                    if (value.length > 12) {
-                      e.currentTarget.value = oldValue;
-                      return;
-                    }
-                    
+                    const regex = /^([A-Z]{0,2})(.*)/;
+
                     if (value.length <= 2) {
-                      e.currentTarget.value = value.replace(/[^A-Za-z]/g, '');
-                    } else {
-                      const newValue = value.replace(/[^A-Za-z0-9]/g, '');
-                      if (!/^[A-Za-z]{2}[0-9]*$/.test(newValue)) {
-                        e.currentTarget.value = oldValue;
-                      } else {
-                        e.currentTarget.value = newValue;
-                      }
+                      e.currentTarget.value = value.replace(
+                        /[^A-Za-z]/g,
+                        "",
+                      );
+                    }
+
+                    const match =regex.exec(value); 
+
+                    console.log(match);
+                    if (match !== null) {
+                        let firstTwoChars = match[1];  // กลุ่มที่ 1 จับตัวอักษร 2 ตัวแรก
+                        let rest = match[2];           // กลุ่มที่ 2 จับส่วนที่เหลือหลังตัวอักษร 2 ตัวแรก
+
+                        let onlyNumbers = rest.replace(/[^0-9]/g, '');
+
+                        let result = firstTwoChars + onlyNumbers;
+
+                        if (result.length > 12) {
+                            result = result.substring(0, 12);  // ตัดความยาวเกิน 12 ตัวออก
+                        }
+
+                        e.target.value = result;
                     }
                   },
-                  maxLength: 14
                 }
               }}
             />
