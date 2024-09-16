@@ -184,7 +184,10 @@ export default function Page() {
                         /[^A-Za-z]/g,
                         "",
                       );
+                      return;
                     }
+
+                    console.log(value);
 
                     const match =regex.exec(value); 
 
