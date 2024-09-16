@@ -50,7 +50,7 @@ export default function Page() {
   useEffect(() => {
     reset({
       firstname: "สวัสดีเมือง",
-      laserCode: formatLaserCode("ME1122993616"),
+      laserCode: "",
     });
   }, [])
 
@@ -141,6 +141,7 @@ export default function Page() {
                   return;
                 }
 
+
                 trigger("laserCode");
 
                 if (getValues("laserCode").length < 12) {
@@ -175,37 +176,27 @@ export default function Page() {
               slotProps={{
                 input: {
                   onInput: (e: any) => {
-                    const oldValue = getValues("laserCode");
-                    const value = e.currentTarget.value.toUpperCase();
-                    const regex = /^([A-Z]{0,2})(.*)/;
+                    let value = e.currentTarget.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+                    let tempValue = '';
 
-                    if (value.length <= 2) {
-                      e.currentTarget.value = value.replace(
-                        /[^A-Za-z]/g,
-                        "",
-                      );
+                    for (let i = 0; i < value.length; i++ ) {
+                      if (tempValue.length <= 1){
+                        if (value[i].match(/[A-Za-z]/)) {
+                          tempValue += value[i];
+                        }
+                        continue;
+                      }
+                      if (value[i].match(/[0-9]/)) {
+                        tempValue += value[i];
+                      }
+                    }
+                    if (tempValue.length > 12) {
+                      tempValue = tempValue.slice(0, 12);
+                      e.target.value = tempValue;
                       return;
                     }
 
-                    console.log(value);
-
-                    const match =regex.exec(value); 
-
-                    console.log(match);
-                    if (match !== null) {
-                        let firstTwoChars = match[1];  // กลุ่มที่ 1 จับตัวอักษร 2 ตัวแรก
-                        let rest = match[2];           // กลุ่มที่ 2 จับส่วนที่เหลือหลังตัวอักษร 2 ตัวแรก
-
-                        let onlyNumbers = rest.replace(/[^0-9]/g, '');
-
-                        let result = firstTwoChars + onlyNumbers;
-
-                        if (result.length > 12) {
-                            result = result.substring(0, 12);  // ตัดความยาวเกิน 12 ตัวออก
-                        }
-
-                        e.target.value = result;
-                    }
+                    e.currentTarget.value = tempValue;
                   },
                 }
               }}
