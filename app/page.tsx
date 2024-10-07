@@ -39,7 +39,7 @@ export default function Page() {
       }}
       spacing={2}
     >
-      <Typography level="title-lg">Version. 0.0.1</Typography>
+      <Typography level="title-lg">Version. 0.0.2</Typography>
       <Typography level="title-lg">Form</Typography>
 
       <Stack
